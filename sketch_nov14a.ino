@@ -8,52 +8,72 @@ void setup() {
  
 }
 
-long intStartTime = 0;
-long currentPosition = -999;
-long goalPosition = 0;
-long Kp = 1;
-long Kd = 1;
-long Vout11 = 0;
-long Vout9=0;
-long prevError = 0;
-long currError = 0;
+double intStartTime = 0;
+double currentPosition = -999.0;
+double goalPosition = 1;
+double Kp = 5;
+double Kd = 1;
+double Vout11 = 0;
+double Vout9=0;
+double prevError = 0;
+double currError = 0;
 
+double riseTime = 0;
+
+double startLoop = 0;
+double endLoop = 0;
 
 void loop() {
-  long currTime = millis();
+  double currTime = millis();
+  goalPosition = sin(currTime);
   if( (currTime - intStartTime) > 100){
       currentPosition = myEnc.read();
-      float radPosition = currentPosition/180*PI;
-      //Serial.println(radPosition);
-      //Serial.println(newPosition);
-      //actual code fun fun
+      double radPosition = (currentPosition*2*PI)/(28*298);
+      Serial.println(radPosition);
       Serial.println("looping");
-      intStartTime = millis();
       
-      //calculating controller output 
-      //long velocity = (currentPosition - oldPosition)/(currTime - intStartTime);
-      //old position is the same
-      currError = goalPosition - radPosition; 
-      long dervError = (currError - prevError)/(currTime - intStartTime);
-      long C = Kp*currError + Kd*dervError;  
+      currError = goalPosition - radPosition; //steady state
+      double dervError = (currError - prevError)/(currTime - intStartTime);
+
+      double C = Kp*currError + Kd*dervError;  
       prevError = currError;
 
       //converting controller output units
-     float value = C *255 / 5;
+     double value = C *255 / 5;
       if(abs (C) <= 5){
         if(value>0){
-          Vout11 = value;
-          Vout9 = 0;
+          Vout11 = 0;
+          Vout9 = value;
         }
         else {
-          Vout11 = 0;
-          Vout9 = value;    
+          Vout11 = -value;
+          Vout9 = 0;
+ 
         }
         
-        analogWrite(9,Vout9);
-        analogWrite(11,Vout11);
-      }          
-
-  }
+      analogWrite(9,Vout9);
+      analogWrite(11,Vout11); 
       
+      }    
+
+      if((radPosition < (goalPosition/10*9) )&& (radPosition > (goalPosition/10))){
+        riseTime = currTime;
+        
+      }
+
+     if(goalPosition < 1/20 * 19){
+        startLoop = currTime;
+      }
+      if(goalPosition > -1/20 * 19){
+        endLoop = currTime;
+        Serial.println("rise");
+        Serial.println(endLoop - startLoop);
+      }
+
+      Serial.println(currError); //overshoot only the final time    
+      intStartTime = currTime;
+      //Serial.println(riseTime);
+     }  
+  
 }
+
