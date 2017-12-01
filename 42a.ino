@@ -11,7 +11,7 @@ void setup() {
 double intStartTime = 0;
 double currentPosition = -999.0;
 double goalPosition = 1;
-double Kp = 4.44;
+double Kp = 4.5;
 double Kd = 1;
 double Vout11 = 0;
 double Vout9=0;
