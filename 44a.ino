@@ -11,8 +11,8 @@ void setup() {
 double intStartTime = 0;
 double currentPosition = -999.0;
 double goalPosition = 1;
-double Kp = 4.5;
-double Kd = 1;
+double Kp = 0;
+double Kd = 0;
 double Vout11 = 0;
 double Vout9=0;
 double prevError = 0;
@@ -56,12 +56,27 @@ void loop() {
           Vout9 = 0;
  
         }
+       
+      
+      }else{
+
+        if(value > 0){
+          Vout11 = 0;
+          Vout9 = 5 *255 / 5;
+        }
+        else {
+          Vout11 = -5 *255 / 5;
+          Vout9 = 0;
+ 
+        }
+
+          
+      }
+
         
       analogWrite(9,Vout9);
       analogWrite(11,Vout11); 
       
-      }    
-
       if((radPosition < (goalPosition/10*9) )&& (radPosition > (goalPosition/10))){
         riseTime = currTime;
         
