@@ -33,14 +33,11 @@ void loop() {
   double currTime = millis();
   //goalPosition = sin(currTime);
   if( (currTime - intStartTime) > 100){
-    if(millis() < 100000){
-   double eqtime = millis() / 1000.0;
-   double xt = 1.0 - (1.0 + 12.0*eqtime)*pow(2.718281828459045235360287,(-12.0*eqtime));
-   Serial.println(xt);
-    }
+  
       currentPosition = myEnc.read();
       double radPosition = (currentPosition*2*PI)/(28*298);
-      //Serial.println(radPosition);
+      Serial.println(radPosition);
+      Serial.println(millis());
      // Serial.println("looping");
       
       currError = goalPosition - radPosition; //steady state
@@ -103,5 +100,6 @@ void loop() {
      }  
   
 }
+
 
 
