@@ -26,7 +26,7 @@ double endLoop = 0;
 void loop() {
   double currTime = millis();
   goalPosition = sin(currTime/1000);
-  if( (currTime - intStartTime) > 100){
+  if( (currTime - intStartTime) >+ 10){
       currentPosition = myEnc.read();
       double radPosition = (currentPosition*2*PI)/(28*298);
       Serial.println(radPosition);
