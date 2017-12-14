@@ -33,7 +33,7 @@ void loop() {
 
   double currTime = millis();
   goalPosition = sin(currTime/1000);
-  if( (currTime - intStartTime) > 100){
+  if( (currTime - intStartTime) >= 10){
     //if(millis() < 100000){
    //double eqtime = millis() / 1000.0;
    //double xt = 1.0 - (1.0 + 12.0*eqtime)*pow(2.718281828459045235360287,(-12.0*eqtime));
@@ -47,7 +47,7 @@ void loop() {
       currError = goalPosition - radPosition; //steady state
       double dervError = (currError - prevError)/(currTime - intStartTime);
 
-      iSumation += currError*(currTime - intStartTime);
+      iSumation += currError*(currTime - intStartTime)/1000;
       double integralterm = Ki * iSumation;
       Serial.println("integralterm");
       Serial.println(integralterm);
